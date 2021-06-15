@@ -10,12 +10,21 @@
     <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="app">
-        <p>{{ title }}</p>
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col">
+                <widget-form></widget-form>
+            </div>
+            <div class="col">
+            </div>
+        </div>
     </div>
 
     <!-- Import App -->
     <script src="./main.js"></script>
+
+    <!-- Import Components -->
+    <script src="./components/WidgetForm.js"></script>
 
     <!-- Mount App -->
     <script>

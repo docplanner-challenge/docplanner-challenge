@@ -1,7 +1,1 @@
-const app = Vue.createApp({
-    data() {
-        return {
-            title: "Stwórz własny widget"
-        }
-    }
-})
+const app = Vue.createApp({})
