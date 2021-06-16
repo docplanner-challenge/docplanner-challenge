@@ -1,3 +1,4 @@
+/* General styles */
 body {
     background-color: #edeff2;
     font-size: 1rem;
@@ -11,6 +12,7 @@ body {
     padding: 20px;
 }
 
+/* WidgetForm styles */
 .widget-panel {
     background-color: #fff;
     padding: 20px;
@@ -57,3 +59,38 @@ body {
     pointer-events: all !important;
     cursor: not-allowed;
 }
+
+/* WidgetPreview styles */
+.widget-display {
+    padding: 10px;
+    border: 2px solid #e74c3c;
+    position: relative;
+    text-align: center;
+}
+
+.widget-display::before, .widget-display::after {
+    content: "";
+    display: block;
+    position: absolute;
+    background: #edeff2;
+  }
+  .widget-display::before {
+    top: -0.3em;
+    bottom: -0.3em;
+    left: 1em;
+    right: 1em;
+  }
+  .widget-display::after {
+    left: -0.3em;
+    right: -0.3em;
+    top: 1em;
+    bottom: 1em;
+  }
+  .widget-display .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .widget {
+      padding: 40px;
+  }

@@ -1,49 +1,49 @@
 app.component('widget-form', {
     template:
-    /*html*/
-    `
-    <div class="widget-panel">
-        <h3>Stwórz własny widget</h3>
-        <p class="text-muted">Połącz profil na ZnanyLekarz z Twoją stroną internetową. Pozwól swoim pacjentom bezpośrednio umawiać wizyty i dzielić się opiniami.</p>
-        <hr/>
-        <div class="widget-form">
-            <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">1</span>Wyszukaj swój profil na ZnanyLekarz lub wprowadź link do profilu.</label>
-            <input id="search" class="form-bar" @input="resultQuery(searchQuery)" v-model="searchQuery">
-            <div v-if="!resultsGenerated">
-                <div v-for="item in searchResult">
-                    <div v-for="hit in item">
-                        <div v-for="h in hit">
-                            <p class="form-tile" @click="selectDoctor(h)">
-                                <img class="form-icon" :src="h.image_micro_square_absolute">
-                                {{ h.fullname_formatted }}
-                            </p>
+        /*html*/
+        `
+            <div class="widget-panel">
+                <h3>Stwórz własny widget</h3>
+                <p class="text-muted">Połącz profil na ZnanyLekarz z Twoją stroną internetową. Pozwól swoim pacjentom bezpośrednio umawiać wizyty i dzielić się opiniami.</p>
+                <hr/>
+                <div class="widget-form">
+                    <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">1</span>Wyszukaj swój profil na ZnanyLekarz lub wprowadź link do profilu.</label>
+                    <input id="search" class="form-bar" @input="resultQuery(searchQuery)" v-model="searchQuery">
+                    <div v-if="!resultsGenerated">
+                        <div v-for="item in searchResult">
+                            <div v-for="hit in item">
+                                <div v-for="h in hit">
+                                    <p class="form-tile" @click="selectDoctor(h)">
+                                        <img class="form-icon" :src="h.image_micro_square_absolute">
+                                        {{ h.fullname_formatted }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div v-if=resultsGenerated>
+                        <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">2</span>Wybierz jeden z rekomendowanych typów widgetów.</label>
+                        <div id="select-widget">
+                            <div v-if="selectedDoctor.surname">
+                                <div v-for="widget in widgetsForDoctors">
+                                    <p :class="{ selected: widget.id === selectedWidgetID }" class="form-tile" @click="selectWidget(widget)">
+                                        {{ widget.title }} <span class="badge bg-primary" v-if="widget.isRecommended">POLECANE</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div v-for="widget in widgetsForFacilities">
+                                    <p :class="{ selected: widget.id === selectedWidgetID }" class="form-tile" @click="selectWidget(widget)">
+                                        {{ widget.title }} <span class="badge bg-primary" v-if="widget.isRecommended">POLECANE</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <input :disabled="!isActive" :class="{ disabled: !isActive }" class="btn btn-primary form-element" type="submit" value="Wygeneruj kod widgetu">
                 </div>
-            </div>
-            <div v-if=resultsGenerated>
-                <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">2</span>Wybierz jeden z rekomendowanych typów widgetów.</label>
-                <div id="select-widget">
-                    <div v-if="selectedDoctor.surname">
-                        <div v-for="widget in widgetsForDoctors">
-                            <p :class="{ selected: widget.id === selectedWidgetID }" class="form-tile" @click="selectWidget(widget)">
-                                {{ widget.title }} <span class="badge bg-primary" v-if="widget.isRecommended">POLECANE</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <div v-for="widget in widgetsForFacilities">
-                            <p :class="{ selected: widget.id === selectedWidgetID }" class="form-tile" @click="selectWidget(widget)">
-                                {{ widget.title }} <span class="badge bg-primary" v-if="widget.isRecommended">POLECANE</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <input :disabled="!isActive" :class="{ disabled: !isActive }" class="btn btn-primary form-element" type="submit" value="Wygeneruj kod widgetu">
-        </div>
-    </div>`,
+            </div>`,
     data() {
         return {
             items: [],
@@ -60,7 +60,7 @@ app.component('widget-form', {
                 { id: 7, title: "Certyfikat", isRecommended: false }
             ],
             widgetsForFacilities: [
-                { id: 8, title: "Standardowy", isRecommended: false} ,
+                { id: 8, title: "Standardowy", isRecommended: false },
                 { id: 9, title: "Prosty link", isRecommended: false },
                 { id: 10, title: "Lista kalendarzy", isRecommended: false },
                 { id: 11, title: "Certyfikat", isRecommended: false },
@@ -87,26 +87,27 @@ app.component('widget-form', {
                 .then(data => this.items.push(data))
                 .catch(error => console.log(error.message))
         }
-      },
-     methods: {
-            resultQuery(searchQuery) {
-                this.resultsGenerated = false
-                this.searchResult = this.items.filter(item =>
-                    item.hits.every(hit =>
-                        hit.fullname_formatted.toLowerCase().trim()
-                            .includes(searchQuery.toLowerCase().trim())
-                    )
+    },
+    methods: {
+        resultQuery(searchQuery) {
+            this.resultsGenerated = false
+            this.searchResult = this.items.filter(item =>
+                item.hits.every(hit =>
+                    hit.fullname_formatted.toLowerCase().trim()
+                        .includes(searchQuery.toLowerCase().trim())
                 )
-            },
-            selectDoctor(doctor) {
-                this.selectedDoctor = doctor
-                this.searchQuery = doctor.url
-                this.resultsGenerated = true
-              },
-              selectWidget(widget) {
-                  this.isActive = true
-                  this.selectedWidgetID = widget.id
-                  console.log(widget)
-              }
+            )
+        },
+        selectDoctor(doctor) {
+            this.selectedDoctor = doctor
+            this.searchQuery = doctor.url
+            this.resultsGenerated = true
+            this.$emit('doctor', doctor.urlname)
+        },
+        selectWidget(widget) {
+            this.isActive = true
+            this.selectedWidgetID = widget.id
+            this.$emit('widget', widget.id)
         }
+    }
 })
