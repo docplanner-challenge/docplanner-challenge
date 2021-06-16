@@ -13,10 +13,10 @@
     <div id="app" class="container">
         <div class="row">
             <div class="col">
-                <widget-form @doctor="getDoctor" @widget="getWidget"></widget-form>
+                <widget-form @doctor="getDoctor" @widget="getWidget" :code="code"></widget-form>
             </div>
             <div class="col">
-                <widget-preview :doctor="doctor" :widget="widget"></widget-preview>
+                <widget-preview :doctor="doctor" :widget="widget" @code="setCode"></widget-preview>
             </div>
         </div>
     </div>

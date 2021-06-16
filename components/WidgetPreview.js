@@ -66,5 +66,6 @@ app.component('widget-preview', {
             default:
                 this.widgetUrl = ``
         }
+        this.$emit('code', this.widgetUrl)
     }
 })

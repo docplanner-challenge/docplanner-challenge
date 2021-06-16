@@ -1,4 +1,9 @@
 app.component('widget-form', {
+    props: {
+        code: {
+            type: String
+        }
+    },
     template:
         /*html*/
         `
@@ -7,7 +12,7 @@ app.component('widget-form', {
                 <p class="text-muted">Połącz profil na ZnanyLekarz z Twoją stroną internetową. Pozwól swoim pacjentom bezpośrednio umawiać wizyty i dzielić się opiniami.</p>
                 <hr/>
                 <div class="widget-form">
-                    <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">1</span>Wyszukaj swój profil na ZnanyLekarz lub wprowadź link do profilu.</label>
+                    <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">1</span> Wyszukaj swój profil na ZnanyLekarz lub wprowadź link do profilu.</label>
                     <input id="search" class="form-bar" @input="resultQuery(searchQuery)" v-model="searchQuery">
                     <div v-if="!resultsGenerated">
                         <div v-for="item in searchResult">
@@ -22,7 +27,7 @@ app.component('widget-form', {
                         </div>
                     </div>
                     <div v-if=resultsGenerated>
-                        <label for="search" class="form-element"><span class="badge rounded-pill bg-primary text-light">2</span>Wybierz jeden z rekomendowanych typów widgetów.</label>
+                        <label for="choose" class="form-element"><span class="badge rounded-pill bg-primary text-light">2</span> Wybierz jeden z rekomendowanych typów widgetów.</label>
                         <div id="select-widget">
                             <div v-if="selectedDoctor.surname">
                                 <div v-for="widget in widgetsForDoctors">
@@ -41,7 +46,12 @@ app.component('widget-form', {
                         </div>
                     </div>
                     <br />
-                    <input :disabled="!isActive" :class="{ disabled: !isActive }" class="btn btn-primary form-element" type="submit" value="Wygeneruj kod widgetu">
+                    <input :disabled="!isActive" :class="{ disabled: !isActive }" class="btn btn-primary form-element" type="submit" value="Wygeneruj kod widgetu" @click="isWidgetReady = true">
+                    <div v-if="isWidgetReady">
+                        <label for="copy"><span class="badge rounded-pill bg-primary text-light">3</span> Jeszcze tylko jeden krok dzieli Cię od połączenia profilu na ZnanyLekarz z Twoją stroną internetową.</label>
+                        <code for="code">{{ code }}</code>
+                        <input class="btn btn-success form-element" type="submit" value="Kopiuj kod widgetu" @click="copyCode">
+                    </div>
                 </div>
             </div>`,
     data() {
@@ -67,7 +77,8 @@ app.component('widget-form', {
                 { id: 12, title: "Przycisk", isRecommended: false }
             ],
             isActive: false,
-            selectedWidgetID: null
+            selectedWidgetID: null,
+            isWidgetReady: false
         }
     },
     mounted() {
@@ -108,6 +119,11 @@ app.component('widget-form', {
             this.isActive = true
             this.selectedWidgetID = widget.id
             this.$emit('widget', widget.id)
+        },
+        copyCode() {
+            navigator.clipboard.writeText(this.code)
+                .then(() => alert("Kod widgetu został skopiowany!"))
+                .catch(error => alert(error.message)); 
         }
     }
 })

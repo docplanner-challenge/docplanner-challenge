@@ -2,7 +2,8 @@ const app = Vue.createApp({
     data() {
         return {
             doctor: '',
-            widget: null
+            widget: null,
+            code: ''
         }
     },
     methods: {
@@ -11,6 +12,9 @@ const app = Vue.createApp({
         },
         getWidget(widget) {
             this.widget = widget
+        },
+        setCode(code) {
+            this.code = code
         }
     }
 })
